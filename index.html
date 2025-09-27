@@ -37,56 +37,95 @@
             </div>
         </div>
     </div>
+    <div class="forecast">
+        <div class="forecast-cards"></div>
+    </div>
 </div>
+
 <script>
     const apiKey="30e723c2b8aeca6dd6ca038d98194514";
     const ApiURL="https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+    const five_day_forcaste_api_url="https://api.openweathermap.org/data/2.5/forecast?units=metric&q=";
     const searchBox=document.querySelector(".search input");
     const searchBtn=document.querySelector(".search button");
     const WeatherIcon=document.querySelector(".weather-icon");
 
     async function checkweather(city){
         const response =await fetch(ApiURL +city+ `&appid=${apiKey}`);
+        const five_day_response=await fetch(five_day_forcaste_api_url +city+ `&appid=${apiKey}`);
 
         if(response.status==404){
             document.querySelector(".error").style.display="block";
             document.querySelector(".weather").style.display="none";
 
-        }else{
+        }
+        else{
             var data=await response.json();
-        document.querySelector(".city").innerHTML=data.name;
-        document.querySelector(".temp").innerHTML=Math.round(data.main.temp)+"°C";
-        document.querySelector(".humidity").innerHTML=data.main.humidity+"%";
-        document.querySelector(".wind").innerHTML=data.wind.speed+" km/h";
+            document.querySelector(".city").innerHTML=data.name;
+            document.querySelector(".temp").innerHTML=Math.round(data.main.temp)+"°C";
+            document.querySelector(".humidity").innerHTML=data.main.humidity+"%";
+            document.querySelector(".wind").innerHTML=data.wind.speed+" km/h";
 
-        if(data.weather[0].main=="Clouds"){
-            WeatherIcon.src="images/clouds.png";
-        }
-        else if(data.weather[0].main=="Clear"){
-            WeatherIcon.src="images/clear.png";
-        }
-        else if(data.weather[0].main=="Rain"){
-            WeatherIcon.src="images/rain.png";
-        }
-        else if(data.weather[0].main=="Dizzle"){ 
-            WeatherIcon.src="images/drizzle.png";
-        }
-        else if(data.weather[0].main=="Mist"){
-            WeatherIcon.src="images/mist.png";
-        }
-        document.querySelector(".weather").style.display="block";
-        document.querySelector(".error").style.display="none";
+            if(data.weather[0].main=="Clouds"){
+                WeatherIcon.src="images/clouds.png";
+            }
+            else if(data.weather[0].main=="Clear"){
+                WeatherIcon.src="images/clear.png";
+            }
+            else if(data.weather[0].main=="Rain"){
+                WeatherIcon.src="images/rain.png";
+            }
+            else if(data.weather[0].main=="Dizzle"){ 
+                WeatherIcon.src="images/drizzle.png";
+            }
+            else if(data.weather[0].main=="Mist"){
+                WeatherIcon.src="images/mist.png";
+            }
+            document.querySelector(".weather").style.display="block";
+            document.querySelector(".error").style.display="none";
 
         }
+
+        if (five_day_response.status==404){
+            document.querySelector(".error").style.display="block";
+            document.querySelector(".weather").style.display="none";
+
+        }
+        
+        else{
+            var five_day_data=await five_day_response.json();
+            console.log(five_day_data);
+        }
+
+        const forecastContainer = document.querySelector(".forecast-cards");
+        forecastContainer.innerHTML = ""; // clear old data
+
+        const dailyForecasts = five_day_data.list.filter(item => 
+            item.dt_txt.includes("12:00:00")
+        );
+
+        dailyForecasts.forEach(day => {
+            const date = new Date(day.dt_txt);
+            const options = { weekday: 'short', month: 'short', day: 'numeric' };
+            const dayName = date.toLocaleDateString(undefined, options);
+
+            const icon = day.weather[0].main === "Clouds" ? "images/clouds.png" :
+                        day.weather[0].main === "Clear" ? "images/clear.png" :
+                        day.weather[0].main === "Rain" ? "images/rain.png" :
+                        day.weather[0].main === "Drizzle" ? "images/drizzle.png" :
+                        day.weather[0].main === "Mist" ? "images/mist.png" :
+                        "images/clear.png";
+
+            forecastContainer.innerHTML += `
+                <div class="forecast-card">
+                    <p>${dayName}</p>
+                    <img src="${icon}">
+                    <p>${Math.round(day.main.temp)}°C</p>
+                </div>
+            `;
+        });
         
     }
-
-
-
-        
-
-
-
 
 searchBtn.addEventListener("click", ()=>{
     checkweather(searchBox.value);
@@ -95,7 +134,6 @@ searchBtn.addEventListener("click", ()=>{
 
 
 </script>
-
 
 </body>
 </html>
