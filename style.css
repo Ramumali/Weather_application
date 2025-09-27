@@ -11,7 +11,7 @@ body{
 .card{
     width: 90%;
     max-width: 470px;
-    background: linear-gradient(135deg,  #CCFF00, 	#7fff00);
+    background: linear-gradient(135deg,  black, 	black);
     color: #fff;
     margin: 100px auto 0;
     border-radius: 20px;
@@ -41,13 +41,13 @@ body{
     border:0;
     outline:0;
     background:#ebfffc;
-    border-radius: 50%;
+    border-radius: 35%;
     width: 60px;
     height:60px;
     cursor:pointer;
 }
 .search button img{
-    width:16px;
+    width:15px;
 }
 .weather icon{
     width:170px;
@@ -92,4 +92,24 @@ body{
     font-size: 25px;
     margin-top: 10px;
     display: none;
+}
+
+.forecast {
+    margin-top: 20px;
+    text-align: center;
+}
+.forecast-cards {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+.forecast-card {
+    background: #fff3;
+    padding: 10px;
+    border-radius: 10px;
+    width: 18%;
+    text-align: center;
+}
+.forecast-card img {
+    width: 50px;
 }
