@@ -1,4 +1,4 @@
-# Ramanathan.M
+# Procedure/Steps to run the Weather fetching application
 Instructions to run the code:
 1)Just click on the website link given on the git file.
 2)Enter the name of the city in given box.
